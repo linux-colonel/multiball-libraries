@@ -87,7 +87,6 @@ void MultiballApp::begin(const char* app_name) {
     _ip_address = String(WiFi.localIP()[0]) + "." + String(WiFi.localIP()[1]) + "." + String(WiFi.localIP()[2]) + "." + String(WiFi.localIP()[3]);
     Serial.println(WiFi.localIP());
     Serial.println("[wifi]");
-*/
     if(!MDNS.begin(_hostname.c_str()))
       Serial.println("Error setting up MDNS responder!");
     else
@@ -95,6 +94,7 @@ void MultiballApp::begin(const char* app_name) {
   } else {
     Serial.println("wifi failure");
   }
+*/
 
 #define GMT_OFFSET_SECS  -8 * 60 * 60
 #define DAYLIGHT_SAVINGS_OFFSET_SECS 3600
