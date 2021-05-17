@@ -34,7 +34,6 @@ bool wifi_begin(const  wifi_credential_t* wifi_credentials, unsigned count, cons
   for(unsigned i = 0; i < count; i++)
     wifiMulti.addAP(wifi_credentials[i].ssid, wifi_credentials[i].password);
 
-  /*
   static int wifi_tries = 0;
   while(wifiMulti.run() != WL_CONNECTED) {
     Serial.print(".");
@@ -45,7 +44,6 @@ bool wifi_begin(const  wifi_credential_t* wifi_credentials, unsigned count, cons
       ESP.restart();
     }
   }
-  */
 
   return true;
 }
