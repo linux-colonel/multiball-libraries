@@ -98,12 +98,11 @@ void MultiballApp::begin(const char* app_name) {
 
 #define GMT_OFFSET_SECS  -8 * 60 * 60
 #define DAYLIGHT_SAVINGS_OFFSET_SECS 3600
-//  configTime(GMT_OFFSET_SECS, DAYLIGHT_SAVINGS_OFFSET_SECS, "time.nist.gov", "0.pool.ntp.org", "1.pool.ntp.org");
- // struct tm timeinfo;
+  configTime(GMT_OFFSET_SECS, DAYLIGHT_SAVINGS_OFFSET_SECS, "time.nist.gov", "0.pool.ntp.org", "1.pool.ntp.org");
+  struct tm timeinfo;
 
   delay(300);
 
-/*
 #ifdef ESP32
   if(!getLocalTime(&timeinfo)){
     Serial.println("Failed to obtain time");
@@ -113,7 +112,6 @@ void MultiballApp::begin(const char* app_name) {
   Serial.println("[ntp]");
   Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 #endif
-*/
 
 #ifdef ESP8266
   time_t now;
