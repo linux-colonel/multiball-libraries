@@ -124,7 +124,6 @@ void MultiballApp::begin(const char* app_name) {
 
   ota_updates_setup();
   Serial.println("[ota_updates]");
-  Serial.flush();
 }
 
 void MultiballApp::handle() {
