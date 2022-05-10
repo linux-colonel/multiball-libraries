@@ -79,20 +79,14 @@ void MultiballApp::begin(const char* app_name) {
 
   restore();
 
-  bool success = false;
-  String ssid = config.get("wifi_ssid", &success);
-  wifiManager.autoConnect(ssid);
-  if(success) {
-    Serial.println(WiFi.localIP());
-    Serial.println("[wifi]");
+  wifiManager.autoConnect();
+  Serial.println(WiFi.localIP());
+  Serial.println("[wifi]");
 
-    if(!MDNS.begin(_hostname.c_str()))
-      Serial.println("Error setting up MDNS responder!");
-    else
-      Serial.println("[mDNS]");
-  } else {
-    Serial.println("wifi failure");
-  }
+  if(!MDNS.begin(_hostname.c_str()))
+    Serial.println("Error setting up MDNS responder!");
+  else
+    Serial.println("[mDNS]");
 
 #define GMT_OFFSET_SECS  -8 * 60 * 60
 #define DAYLIGHT_SAVINGS_OFFSET_SECS 3600
