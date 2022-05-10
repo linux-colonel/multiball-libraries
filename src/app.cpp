@@ -80,7 +80,8 @@ void MultiballApp::begin(const char* app_name) {
   restore();
 
   bool success = false;
-  wifiManager.autoConnect(config.get("wifi_ssid", &success));
+  String ssid = config.get("wifi_ssid", &success);
+  wifiManager.autoConnect(ssid);
   if(success) {
     Serial.println(WiFi.localIP());
     Serial.println("[wifi]");
