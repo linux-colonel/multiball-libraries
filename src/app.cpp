@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
 #ifdef ESP32
 #include <SPIFFS.h>
@@ -20,7 +21,6 @@ extern "C" {
 
 #include <multiball/app.h>
 
-#include <multiball/wifi.h>
 #include <multiball/ota_updates.h>
 #include <multiball/mqtt.h>
 #include <multiball/homebus.h>
@@ -41,11 +41,7 @@ MultiballApp::MultiballApp() {
   bootCount++;
 }
 
-void MultiballApp::wifi_credentials(uint8_t count, const wifi_credential_t *credentials) {
-  _number_of_wifi_credentials = count;
-  _wifi_credentials = (wifi_credential_t *)malloc(sizeof(wifi_credential_t)*count);
-  memcpy(_wifi_credentials, credentials, sizeof(wifi_credential_t)*count);
-}
+WiFiManager wifiManager;
 
 void MultiballApp::begin(const char* app_name) {
   Serial.begin(115200);
@@ -83,8 +79,9 @@ void MultiballApp::begin(const char* app_name) {
 
   restore();
 
-  if(wifi_begin(_wifi_credentials, 3, _hostname.c_str())) {
-    _ip_address = String(WiFi.localIP()[0]) + "." + String(WiFi.localIP()[1]) + "." + String(WiFi.localIP()[2]) + "." + String(WiFi.localIP()[3]);
+  bool success = false
+  wifiManager.autoConnect(config.get("wifi_ssid"), &success);
+  if(success) {
     Serial.println(WiFi.localIP());
     Serial.println("[wifi]");
 
@@ -98,7 +95,7 @@ void MultiballApp::begin(const char* app_name) {
 
 #define GMT_OFFSET_SECS  -8 * 60 * 60
 #define DAYLIGHT_SAVINGS_OFFSET_SECS 3600
-  configTime(GMT_OFFSET_SECS, DAYLIGHT_SAVINGS_OFFSET_SECS, "192.168.43.1", "0.pool.ntp.org", "1.pool.ntp.org");
+  configTime(GMT_OFFSET_SECS, DAYLIGHT_SAVINGS_OFFSET_SECS, "0.pool.ntp.org", "1.pool.ntp.org");
   struct tm timeinfo;
 
   delay(300);
@@ -127,19 +124,12 @@ void MultiballApp::begin(const char* app_name) {
 }
 
 void MultiballApp::handle() {
-  wifi_handle();
   ota_updates_handle();
   homebus_handle();
 }
 
 unsigned MultiballApp::boot_count() {
   return bootCount;
-}
-
-extern unsigned wifi_failures;
-
-unsigned MultiballApp::wifi_failures() {
-  return 0;
 }
 
 void MultiballApp::persist() {
