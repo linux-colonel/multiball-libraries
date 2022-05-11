@@ -79,6 +79,7 @@ void MultiballApp::begin(const char* app_name) {
 
   restore();
 
+  wifiManager.setConfigPortalBlocking(false);
   wifiManager.autoConnect();
   Serial.println(WiFi.localIP());
   Serial.println("[wifi]");
@@ -121,6 +122,7 @@ void MultiballApp::begin(const char* app_name) {
 void MultiballApp::handle() {
   ota_updates_handle();
   homebus_handle();
+  wifiManager.process();
 }
 
 unsigned MultiballApp::boot_count() {
